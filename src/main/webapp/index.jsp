@@ -21,6 +21,7 @@
         <a href="totaly_not_a_virus">Download More RAM</a>
         <a href="cat">Cats</a>
         <a href="${pageContext.request.contextPath}/dog/list">Dogs</a>
+        <a href="${pageContext.request.contextPath}/upload">↥</a>
     </nav>
 </header>
 <main>
