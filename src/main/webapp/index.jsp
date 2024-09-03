@@ -24,6 +24,10 @@
     </nav>
 </header>
 <main>
+    <a href="get-cookies"> I BAKE SOME COOKIES</a>
+    <a href="have-cookies">Check them</a>
+    <a href="get-session">no thx i prefer Sessions</a>
+    <a href="have-session">Check it</a>
     <p>Repellat eum alias ut quis voluptas. Fugit in eos laboriosam ullam voluptatem occaecati voluptas voluptas.
         Eos unde molestiae enim. Dolor expedita iusto sunt provident quia voluptates ut et. Officiis tempora placeat
         et blanditiis.
