@@ -6,50 +6,57 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+    <%@ include file="/WEB-INF/bootstrapimports.html" %>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style/style.css">
     <title>Dogs</title>
 </head>
 <body>
 <header>
-    <h1>Dog List</h1>
+    <nav class="one">
+        <a href="${pageContext.request.contextPath}/index.jsp">Home</a>
+    </nav>
 </header>
 <main class="container">
-    <% if (dogs == null || dogs.isEmpty()) { %>
-    <p>No Dogs in DataBase</p>
-    <% } else { %>
-    <table class="table table-dark text-center align-middle">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Breed</th>
-            <th>Birth Date</th>
-            <th>Link</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% for (Dog dog : dogs) {%>
-        <tr>
-            <td><%=dog.getName()%>
-            </td>
-            <td><%=dog.getBreed()%>
-            </td>
-            <td><%=dog.getBirthDate()%>
-            </td>
-            <td><a href="${pageContext.request.contextPath}/dog/<%=dog.getId()%>">↩</a></td>
-        </tr>
-        <%}%>
-        </tbody>
-    </table>
-    <%}%>
-
-    <hr/>
-
-    <a href="${pageContext.request.contextPath}/dog/add">Add a dog</a>
-
+    <div class="row my-3">
+        <div class="col-8 offset-2 rounded text-bg-dark p-3">
+            <h1 class="fw-light">- Dogs List -</h1>
+            <hr>
+            <% if (!dogs.isEmpty()) { %>
+            <table class="table table-dark align-middle table-striped text-center">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Breed</th>
+                    <th>Birth date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (Dog d : dogs) {%>
+                <tr>
+                    <td><%= d.getId() %></td>
+                    <td><%= d.getName() %></td>
+                    <td><%= d.getBreed() %></td>
+                    <td><%= d.getBirthDate().toString() %></td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/dog/info?id=<%= d.getId() %>"
+                           class="btn btn-outline-info"><i class="bi bi-eye"></i> Details</a>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+            <%  } else { %>
+            <p>There is no dog in the database yet!</p>
+            <%  }  %>
+            <hr>
+            <div class="text-end">
+                <a href="${pageContext.request.contextPath}/dog/addForm" class="btn btn-outline-success"><i
+                        class="bi bi-plus-circle"></i> Add a Dog</a>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 </html>

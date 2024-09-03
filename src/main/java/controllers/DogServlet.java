@@ -11,7 +11,7 @@ import services.DogService;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@WebServlet(name = "dog-servlet", value= "/dog/*")
+@WebServlet(name = "dog-servlet", value = "/dog/*")
 public class DogServlet extends HttpServlet {
 
     private DogService dogService;
@@ -27,38 +27,47 @@ public class DogServlet extends HttpServlet {
         System.out.println(pathInfo);
 
         switch (pathInfo) {
-            case "/list":
-                req.setAttribute("dogs", dogService.findAll());
-                req.getRequestDispatcher("/WEB-INF/dog-list.jsp").forward(req,resp);
-                break;
-            case "/add":
-                req.getRequestDispatcher("/WEB-INF/dog-add.jsp").forward(req,resp);
-                break;
-            default:
-                try {
-                    int id = Integer.parseInt(pathInfo.substring(1));
-                    Dog dog = dogService.findById(id);
-                    req.setAttribute("dog", dog);
-                    req.getRequestDispatcher("/WEB-INF/dog-info.jsp").forward(req,resp);
-
-                } catch (NumberFormatException e) {
-                    resp.sendRedirect("/dog/list");
-                }
-                break;
+            case "/addForm" -> addForm(req, resp);
+            case "/add" -> add(req, resp);
+            case "/info" -> info(req, resp);
+            default -> list(req, resp);
         }
-
-
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        dogService.create(
-                req.getParameter("name"),
-                req.getParameter("breed"),
-                LocalDate.parse(req.getParameter("birthDate"))
-        );
+        doGet(req, resp);
+    }
 
-        doGet(req,resp);
+    protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("dogs", dogService.findAll());
+        req.getRequestDispatcher("/WEB-INF/dog-list.jsp").forward(req, resp);
+    }
+
+    protected void addForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Dog dog = Dog.builder().name("").breed("").birthDate(LocalDate.now()).build();
+        req.setAttribute("dog", dog);
+        req.setAttribute("mode", "add");
+        req.getRequestDispatcher("/WEB-INF/dog-form.jsp").forward(req, resp);
+    }
+
+    protected void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        String breed = req.getParameter("breed");
+        LocalDate birthDate = LocalDate.parse(req.getParameter("birthDate"));
+
+        dogService.create(name, breed, birthDate);
+
+        resp.sendRedirect("list");
+    }
+
+    protected void info(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        Dog dog = dogService.findById(id);
+
+        req.setAttribute("dog", dog);
+        req.setAttribute("mode", "view");
+        req.getRequestDispatcher("/WEB-INF/dog-form.jsp").forward(req, resp);
     }
 
 }
